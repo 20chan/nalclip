@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  nalclip-server:
+    container_name: nalclip-server
+    build: ./
+    ports:
+      - 9000:9000
+    env_file:
+      - .env
+    depends_on:
+      - nalclip-db
+  nalclip-db:
+    container_name: nalclip-db
+    image: postgres:12
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    volumes:
+      - ./postgres:/var/lib/prostgresql/data
+volumes:
+  nalclip-db:
+    name: nest-db

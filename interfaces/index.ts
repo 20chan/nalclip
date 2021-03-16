@@ -8,3 +8,9 @@ export type User = {
   id: number
   name: string
 }
+
+export type Clip = {
+  id: string;
+  createdAt: Date,
+  content: string,
+}
