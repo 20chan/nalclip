@@ -3,6 +3,8 @@ import copy from 'copy-to-clipboard';
 import { Clip } from '../interfaces';
 import React from 'react';
 import Head from 'next/head';
+import 'semantic-ui-css/semantic.min.css';
+import { Button, Container, Divider, Header, Loader, Table } from 'semantic-ui-react';
 
 const IndexPage = () => {
   const fetcher = async (url: string) => await (await fetch(url)).json();
@@ -11,30 +13,36 @@ const IndexPage = () => {
   });
   const clipsDisplay = data
     ? (
-    <table>
-      <thead>
-        <tr>
-          <th>id</th>
-          <th>createdAt</th>
-          <th>content</th>
-          <th>COPY</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>id</Table.HeaderCell>
+          <Table.HeaderCell>createdAt</Table.HeaderCell>
+          <Table.HeaderCell>content</Table.HeaderCell>
+          <Table.HeaderCell>COPY</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
         {
           data.map(x =>
-            <tr key={x.id}>
-              <td>{x.id}</td>
-              <td>{x.createdAt}</td>
-              <td>{x.content}</td>
-              <td><button onClick={() => copy(x.content)}>COPY</button></td>
-            </tr>
+            <Table.Row key={x.id}>
+              <Table.Cell>{x.id}</Table.Cell>
+              <Table.Cell>{x.createdAt}</Table.Cell>
+              <Table.Cell>{x.content}</Table.Cell>
+              <Table.Cell><Button onClick={() => copy(x.content)}>COPY</Button></Table.Cell>
+            </Table.Row>
           )
         }
-      </tbody>
-    </table>
+      </Table.Body>
+    </Table>
       )
-    : <i>uhoh</i>;
+    : <Loader>loading</Loader>
+
+  const style = {
+    h1: {
+      marginTop: '1em',
+    },
+  };
   return (
     <div>
       <Head>
@@ -42,11 +50,14 @@ const IndexPage = () => {
         <meta charSet='utf-8' />
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       </Head>
-      <h1>nalclip</h1>
-      <button onClick={revalidate}>refresh</button>
-      <ul>
+      <Header as='h1' textAlign='center' style={style.h1}>nalclip</Header>
+      <Container textAlign='right'>
+        <Button basic color='blue' onClick={revalidate}>refresh</Button>
+      </Container>
+      <Divider />
+      <Container>
         { clipsDisplay }
-      </ul>
+      </Container>
     </div>
   );
 }
